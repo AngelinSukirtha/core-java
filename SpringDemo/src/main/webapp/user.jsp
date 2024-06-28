@@ -57,9 +57,12 @@ th {
 	<%
 	List<User> users = (List<User>) request.getAttribute("user_list");
 	%>
-	<form action="/searchByName" method="get">
-		<lable for="username">Username:</lable>
-		<input type="text" name="name" required><br /> <input
+	<!-- <form action="/searchByName" method="get">
+		<input type="text" name="userName" id="userName"> <input
+			type="submit" value="Search">
+	</form> -->
+	<form action="/search" method="get">
+		<input type="text" name="searchText" id="searchText"> <input
 			type="submit" value="Search">
 	</form>
 	<div class="container">

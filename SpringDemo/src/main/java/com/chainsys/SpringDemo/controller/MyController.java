@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,16 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.chainsys.SpringDemo.dao.UserDAO;
-import com.chainsys.SpringDemo.dao.UserImpl;
-import com.chainsys.SpringDemo.mapper.UserMapper;
 import com.chainsys.SpringDemo.model.User;
 
+@Controller
 public class MyController {
 	@Autowired
 	UserDAO userDAO;
-	UserImpl userImpl;
-	UserMapper mapper;
-	JdbcTemplate jdbcTemplate;
 
 	@RequestMapping("/home")
 	public String home() {
@@ -38,7 +34,7 @@ public class MyController {
 		user.setPhoneNumber(phoneNumber);
 		user.setEmail(email);
 		System.out.println("Hello");
-		userImpl.insertUser(user);
+		userDAO.insertUser(user);
 		return "success.jsp";
 	}
 
@@ -51,13 +47,13 @@ public class MyController {
 		user.setUserPassword(userPassword);
 		user.setPhoneNumber(phoneNumber);
 		user.setEmail(email);
-		userImpl.update(user);
+		userDAO.update(user);
 		return "success.jsp";
 	}
 
 	@GetMapping("/listofusers")
 	public String getAllUser(Model model) {
-		List<User> users = userImpl.listUsers();
+		List<User> users = userDAO.listUsers();
 		model.addAttribute("user_list", users);
 		return "user.jsp";
 	}
@@ -66,8 +62,9 @@ public class MyController {
 	public String deleteUser(@RequestParam("userId") Integer userId, Model model) {
 		User user = new User();
 		user.setUserId(userId);
-		userImpl.deleteUser(user);
-		List<User> users = userImpl.listUsers();
+		user.setStatus(false);
+		userDAO.deleteUser(user);
+		List<User> users = userDAO.listUsers();
 		model.addAttribute("users", users);
 		return "home.jsp";
 	}
@@ -75,7 +72,7 @@ public class MyController {
 	@GetMapping("/findUserbyId")
 	public String findUserById(@RequestParam("userId") Integer userId, Model model) {
 		System.out.println("finding");
-		String name = userImpl.findById(userId);
+		String name = userDAO.findById(userId);
 		System.out.println(name);
 		if (name == null) {
 			throw new EmptyResultDataAccessException("User not found", userId);
@@ -84,6 +81,13 @@ public class MyController {
 			model.addAttribute("userFound", name);
 		}
 		return "success.jsp";
+	}
+
+	@GetMapping("/search")
+	public String search(@RequestParam("searchText") String searchText, Model model) {
+		List<User> users = userDAO.search(searchText);
+		model.addAttribute("user_list", users);
+		return "user.jsp";
 	}
 
 }

@@ -17,7 +17,7 @@ public class UserImpl implements UserDAO {
 
 	@Override
 	public List<User> listUsers() {
-		String read = "SELECT user_id, user_name, user_password, phone_number, email FROM Users";
+		String read = "SELECT user_id, user_name, user_password, phone_number, email FROM Users where status=true";
 		List<User> users = jdbcTemplate.query(read, new UserMapper());
 		return users;
 	}
@@ -30,8 +30,8 @@ public class UserImpl implements UserDAO {
 	}
 
 	public void deleteUser(User user) {
-		String delete = "DELETE FROM Users WHERE user_id=?";
-		Object[] params = { user.getUserId() };
+		String delete = "update Users set status=? where user_id=?";
+		Object[] params = { user.getStatus(), user.getUserId() };
 		jdbcTemplate.update(delete, params);
 
 	}
@@ -43,7 +43,6 @@ public class UserImpl implements UserDAO {
 		String queryForObject = null;
 		try {
 			queryForObject = jdbcTemplate.queryForObject(read, String.class, userId);
-			System.out.println(queryForObject);
 		} catch (EmptyResultDataAccessException e) {
 
 		}
@@ -52,8 +51,8 @@ public class UserImpl implements UserDAO {
 
 	@Override
 	public void insertUser(User user) {
-		String save = "INSERT INTO Users (user_name,user_password,phone_number,email) VALUES (?, ?, ?, ?)";
-		Object[] params = { user.getUserName(), user.getUserPassword(), user.getPhoneNumber(), user.getEmail() };
+		String save = "INSERT INTO Users (user_name,user_password,phone_number,email,status) VALUES (?, ?, ?, ?,?)";
+		Object[] params = { user.getUserName(), user.getUserPassword(), user.getPhoneNumber(), user.getEmail(), true };
 		jdbcTemplate.update(save, params);
 
 	}
@@ -64,6 +63,15 @@ public class UserImpl implements UserDAO {
 		Object[] params = { user.getUserName(), user.getUserPassword(), user.getPhoneNumber(), user.getEmail() };
 		int rows = jdbcTemplate.update(update, params);
 		return rows;
+	}
+
+	public List<User> search(String searchText) {
+		String search = "SELECT user_id, user_name, user_password, phone_number, email " + "FROM Users "
+				+ "WHERE user_name LIKE ? OR phone_number LIKE ? OR email = ?";
+		Object[] params = { "%" + searchText + "%", "%" + searchText + "%", "%" + searchText + "%" };
+
+		List<User> userList = jdbcTemplate.query(search, new UserMapper(), params);
+		return userList;
 	}
 
 }

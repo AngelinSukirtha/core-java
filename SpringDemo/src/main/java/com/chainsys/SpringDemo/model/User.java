@@ -6,22 +6,25 @@ public class User {
 	String userPassword;
 	String phoneNumber;
 	String email;
+	boolean status;
 
-	public User(int userId, String userName, String userPassword, String phoneNumber, String email) {
+	public User(int userId, String userName, String userPassword, String phoneNumber, String email, boolean status) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
 		this.userPassword = userPassword;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
+		this.status = status;
 	}
 
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", userName=" + userName + ", userPassword=" + userPassword + ", phoneNumber="
-				+ phoneNumber + ", email=" + email + ", getUserId()=" + getUserId() + ", getUserName()=" + getUserName()
-				+ ", getUserPassword()=" + getUserPassword() + ", getPhoneNumber()=" + getPhoneNumber()
-				+ ", getEmail()=" + getEmail() + "]";
+				+ phoneNumber + ", email=" + email + ", status=" + status + ", getUserId()=" + getUserId()
+				+ ", getUserName()=" + getUserName() + ", getUserPassword()=" + getUserPassword()
+				+ ", getPhoneNumber()=" + getPhoneNumber() + ", getEmail()=" + getEmail() + ", getStatus()="
+				+ getStatus() + "]";
 	}
 
 	public int getUserId() {
@@ -62,6 +65,14 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 	public User() {
