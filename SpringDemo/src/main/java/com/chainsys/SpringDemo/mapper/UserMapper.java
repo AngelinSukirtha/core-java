@@ -2,9 +2,7 @@ package com.chainsys.SpringDemo.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import org.springframework.jdbc.core.RowMapper;
-
 import com.chainsys.SpringDemo.model.User;
 
 public class UserMapper implements RowMapper<User> {

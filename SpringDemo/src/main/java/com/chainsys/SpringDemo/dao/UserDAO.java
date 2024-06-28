@@ -1,7 +1,6 @@
 package com.chainsys.SpringDemo.dao;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import com.chainsys.SpringDemo.model.User;
@@ -19,8 +18,6 @@ public interface UserDAO {
 	public List<User> listUsers();
 
 	public User findOne(Integer userId);
-
-	public String findById(Integer userId);
 
 	public List<User> search(String searchText);
 

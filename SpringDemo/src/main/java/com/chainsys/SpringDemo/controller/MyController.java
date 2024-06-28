@@ -1,16 +1,13 @@
 package com.chainsys.SpringDemo.controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.chainsys.SpringDemo.dao.UserDAO;
 import com.chainsys.SpringDemo.model.User;
 
@@ -27,13 +24,11 @@ public class MyController {
 	@GetMapping("/register")
 	public String saveUser(@RequestParam("userName") String userName, @RequestParam("userPassword") String userPassword,
 			@RequestParam("phoneNumber") String phoneNumber, @RequestParam("email") String email) {
-		System.out.println("Hello");
 		User user = new User();
 		user.setUserName(userName);
 		user.setUserPassword(userPassword);
 		user.setPhoneNumber(phoneNumber);
 		user.setEmail(email);
-		System.out.println("Hello");
 		userDAO.insertUser(user);
 		return "success.jsp";
 	}
@@ -67,20 +62,6 @@ public class MyController {
 		List<User> users = userDAO.listUsers();
 		model.addAttribute("users", users);
 		return "home.jsp";
-	}
-
-	@GetMapping("/findUserbyId")
-	public String findUserById(@RequestParam("userId") Integer userId, Model model) {
-		System.out.println("finding");
-		String name = userDAO.findById(userId);
-		System.out.println(name);
-		if (name == null) {
-			throw new EmptyResultDataAccessException("User not found", userId);
-		} else {
-			System.out.println("user found" + name);
-			model.addAttribute("userFound", name);
-		}
-		return "success.jsp";
 	}
 
 	@GetMapping("/search")

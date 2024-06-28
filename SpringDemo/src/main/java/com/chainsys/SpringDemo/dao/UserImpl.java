@@ -1,12 +1,9 @@
 package com.chainsys.SpringDemo.dao;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import com.chainsys.SpringDemo.mapper.UserMapper;
 import com.chainsys.SpringDemo.model.User;
 
@@ -37,19 +34,6 @@ public class UserImpl implements UserDAO {
 	}
 
 	@Override
-	public String findById(Integer userId) {
-		String read = "SELECT user_name From Users WHERE user_id=?";
-		System.out.println("User ID passed" + userId);
-		String queryForObject = null;
-		try {
-			queryForObject = jdbcTemplate.queryForObject(read, String.class, userId);
-		} catch (EmptyResultDataAccessException e) {
-
-		}
-		return queryForObject;
-	}
-
-	@Override
 	public void insertUser(User user) {
 		String save = "INSERT INTO Users (user_name,user_password,phone_number,email,status) VALUES (?, ?, ?, ?,?)";
 		Object[] params = { user.getUserName(), user.getUserPassword(), user.getPhoneNumber(), user.getEmail(), true };
@@ -67,8 +51,9 @@ public class UserImpl implements UserDAO {
 
 	public List<User> search(String searchText) {
 		String search = "SELECT user_id, user_name, user_password, phone_number, email " + "FROM Users "
-				+ "WHERE user_name LIKE ? OR phone_number LIKE ? OR email = ?";
-		Object[] params = { "%" + searchText + "%", "%" + searchText + "%", "%" + searchText + "%" };
+				+ "WHERE user_id = ? OR user_name LIKE ? OR phone_number LIKE ? OR email LIKE ?";
+		Object[] params = { "%" + searchText + "%", "%" + searchText + "%", "%" + searchText + "%",
+				"%" + searchText + "%" };
 
 		List<User> userList = jdbcTemplate.query(search, new UserMapper(), params);
 		return userList;
